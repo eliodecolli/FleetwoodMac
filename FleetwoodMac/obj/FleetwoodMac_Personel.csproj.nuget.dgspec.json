@@ -1,0 +1,76 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/elio/Downloads/FleetwoodMac/FleetwoodMac/FleetwoodMac_Personel.csproj": {}
+  },
+  "projects": {
+    "/home/elio/Downloads/FleetwoodMac/FleetwoodMac/FleetwoodMac_Personel.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/elio/Downloads/FleetwoodMac/FleetwoodMac/FleetwoodMac_Personel.csproj",
+        "projectName": "FleetwoodMac_Personel",
+        "projectPath": "/home/elio/Downloads/FleetwoodMac/FleetwoodMac/FleetwoodMac_Personel.csproj",
+        "packagesPath": "/home/elio/.nuget/packages/",
+        "outputPath": "/home/elio/Downloads/FleetwoodMac/FleetwoodMac/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/elio/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "EntityFramework": {
+              "target": "Package",
+              "version": "[6.4.0, )"
+            },
+            "MessagePack": {
+              "target": "Package",
+              "version": "[2.1.90, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[2.10.2, )"
+            },
+            "Neo4j.Driver": {
+              "target": "Package",
+              "version": "[4.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.101/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

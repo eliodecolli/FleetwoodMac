@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$PROJECT_DIR$" t="IncludeFlat">
+      <e p="FleetwoodMac" t="IncludeRecursive">
+        <e p="Facade" t="Include">
+          <e p="BusinessLogic" t="Include">
+            <e p="EventsService.cs" t="Include" />
+            <e p="Handlers" t="Include">
+              <e p="Base" t="Include">
+                <e p="IEventHandler.cs" t="Include" />
+              </e>
+              <e p="PersonelEventHandler.cs" t="Include" />
+            </e>
+          </e>
+          <e p="Facade.cs" t="Include" />
+          <e p="Models" t="Include">
+            <e p="Events" t="Include">
+              <e p="ContractAssigned.cs" t="Include" />
+              <e p="ContractCompleted.cs" t="Include" />
+              <e p="ContractUpdated.cs" t="Include" />
+              <e p="UserTaxAddedEvent.cs" t="Include" />
+            </e>
+            <e p="PersonelContract.cs" t="Include" />
+            <e p="PersonelData.cs" t="Include" />
+            <e p="Tax.cs" t="Include" />
+          </e>
+          <e p="Persistence" t="Include">
+            <e p="Mongo" t="Include">
+              <e p="Entities" t="Include">
+                <e p="BaseModel.cs" t="Include" />
+              </e>
+              <e p="Repository" t="Include">
+                <e p="MongoRepository.cs" t="Include" />
+              </e>
+            </e>
+            <e p="Neo4j" t="Include">
+              <e p="Entities" t="Include">
+                <e p="NeoEvent.cs" t="Include" />
+              </e>
+              <e p="NeoConnection.cs" t="Include" />
+            </e>
+            <e p="SqlServer" t="Include">
+              <e p="Entities" t="Include">
+                <e p="Event.cs" t="Include" />
+                <e p="EventType.cs" t="Include" />
+                <e p="Map.cs" t="Include" />
+                <e p="MongoLink.cs" t="Include" />
+              </e>
+              <e p="EventsContext.cs" t="Include" />
+              <e p="Repository" t="Include">
+                <e p="BaseRepository.cs" t="Include" />
+              </e>
+            </e>
+            <e p="Transactions" t="Include">
+              <e p="AsyncTransaction.cs" t="Include" />
+              <e p="BackwardOperation.cs" t="Include" />
+              <e p="ForwardOperation.cs" t="Include" />
+              <e p="ForwardTransactionFailedException.cs" t="Include" />
+              <e p="ITransaction.cs" t="Include" />
+              <e p="Operation.cs" t="Include" />
+              <e p="OperationCompletedEvent.cs" t="Include" />
+              <e p="PolygotTransaction.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="FleetwoodMac_Personel.csproj" t="IncludeRecursive" />
+        <e p="Log.cs" t="Include" />
+        <e p="Program.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.1" t="Include">
+              <e p="FleetwoodMac_Personel.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="FleetwoodMac.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+    <e p="$USER_HOME$/.Rider2019.3/system/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.Rider2019.3/system/resharper-host/local/Transient/ReSharperHost/v193/SolutionCaches/_FleetwoodMac.1956489988.00" t="ExcludeRecursive" />
+  </component>
+</project>
