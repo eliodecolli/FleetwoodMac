@@ -1,4 +1,5 @@
 using System;
+using MongoDB.Bson;
 
 namespace FleetwoodMac_Personel.Facade.Persistence.Neo4J.Entities
 {
@@ -14,7 +15,7 @@ namespace FleetwoodMac_Personel.Facade.Persistence.Neo4J.Entities
 
         public Guid EventId { get; set; }
         
-        public Guid MongoId { get; set; }
+        public ObjectId MongoId { get; set; }
         
         public string EventType { get; set; }
         

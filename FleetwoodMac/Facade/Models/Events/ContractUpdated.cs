@@ -1,15 +1,13 @@
-﻿using System;
-using MessagePack;
+﻿using MessagePack;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace FleetwoodMac_Personel.Facade.Models.Events
 {
     [MessagePackObject]
-    public class ContractUpdated
+    public class ContractUpdated : BaseModel
     {
         [Key(0)]
-        public Guid PersistenceIndex { get; set; }
-
-        [Key(1)]
+        [BsonElement]
         public string Status { get; set; }
     }
 }

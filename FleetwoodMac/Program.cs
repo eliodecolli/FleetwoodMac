@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FleetwoodMac_Personel.Facade.BusinessLogic;
 using FleetwoodMac_Personel.Facade.Models.Events;
 using FleetwoodMac_Personel.Facade.Persistence.Neo4J.Entities;
+using MongoDB.Bson;
 
 namespace FleetwoodMac
 {
@@ -14,25 +15,35 @@ namespace FleetwoodMac
         {
             Log.Initialize("log.txt", LogLevel.All, false);
             
+            var g = Guid.Empty;
+            
             using var service = new EventsService();
-            await service.InsertIntoPersistance<UserTaxAddedEvent>(new NeoEvent()
+            /*for (int i = 0; i < 100; i++)
             {
-                EventType = NeoEvent.TaxAdded,
-                PersistenceIndex = Guid.Empty
-            }, new UserTaxAddedEvent()
-            {
-                PersistenceIndex = new Guid(),
-                Amount = 10
-            }, null);
+                await service.InsertIntoPersistance<UserTaxAddedEvent>(new NeoEvent()
+                {
+                    EventType = NeoEvent.TaxAdded,
+                    PersistenceIndex = g
+                }, new UserTaxAddedEvent()
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    PersistenceIndex = g,
+                    Amount = 10
+                }, null, "Taxes");
+            }
 
-            Console.Read();
+            Console.Read();*/
 
-            var ret = await service.Query<UserTaxAddedEvent>(NeoEvent.TaxAdded, Guid.Empty);
+            var tt = await service.GetTotalTaxes(g);
 
-            ret.Select(x => {
-                Console.WriteLine($"Tax: {x.Amount}");
-                return x;
-            });
+            Console.WriteLine($"Total: {tt.Total} ({tt.Count})");
+
+            /*var ret = await service.QueryByDate<UserTaxAddedEvent>(NeoEvent.TaxAdded, Guid.Empty,
+                DateTime.Parse("01/01/1995"), DateTime.Now, "Taxes");
+                //await service.Query<UserTaxAddedEvent>(NeoEvent.TaxAdded, Guid.Empty);
+
+            foreach(var r in ret)
+                Console.WriteLine(r.Amount);*/
         }
     }
 }

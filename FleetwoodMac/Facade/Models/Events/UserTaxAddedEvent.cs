@@ -1,15 +1,14 @@
 ﻿using MessagePack;
 using System;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace FleetwoodMac_Personel.Facade.Models.Events
 {
     [MessagePackObject]
-    public class UserTaxAddedEvent
+    public class UserTaxAddedEvent : BaseModel
     {
         [Key(0)]
-        public Guid PersistenceIndex { get; set; }
-
-        [Key(1)]
+        [BsonElement]
         public double Amount { get; set; }
     }
 }

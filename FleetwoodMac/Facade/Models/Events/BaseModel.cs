@@ -3,21 +3,19 @@ using System.Collections.Generic;
 using System.Text;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.IdGenerators;
 
-namespace FleetwoodMac_Personel.Facade.Persistence.Mongo.Entities
+namespace FleetwoodMac_Personel.Facade.Models.Events
 {
-    public class BaseModel
+    public abstract class BaseModel
     {
         [BsonId]
         public ObjectId _id { get; set; }
 
         [BsonElement]
-        public Guid Id { get; set; }
+        public ObjectId Id { get; set; }
         
         [BsonElement]
-        public Guid PersistenceId { get; set; }
-
-        [BsonElement]
-        public byte[] Blob { get; set; }
+        public Guid PersistenceIndex { get; set; }
     }
 }

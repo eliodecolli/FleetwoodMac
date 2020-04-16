@@ -15,7 +15,11 @@
           </e>
           <e p="Facade.cs" t="Include" />
           <e p="Models" t="Include">
+            <e p="Aggregates" t="Include">
+              <e p="TaxPeriod.cs" t="Include" />
+            </e>
             <e p="Events" t="Include">
+              <e p="BaseModel.cs" t="Include" />
               <e p="ContractAssigned.cs" t="Include" />
               <e p="ContractCompleted.cs" t="Include" />
               <e p="ContractUpdated.cs" t="Include" />
@@ -27,9 +31,7 @@
           </e>
           <e p="Persistence" t="Include">
             <e p="Mongo" t="Include">
-              <e p="Entities" t="Include">
-                <e p="BaseModel.cs" t="Include" />
-              </e>
+              <e p="Entities" t="Include" />
               <e p="Repository" t="Include">
                 <e p="MongoRepository.cs" t="Include" />
               </e>

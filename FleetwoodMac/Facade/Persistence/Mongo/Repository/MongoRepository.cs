@@ -8,10 +8,12 @@
 // Is it reasonable to use a single collection of Models though? Perhaps in a real life scenario collections should be divided, ie Tasks, Contracts and so on. However, MessagePack being pretty fast might compensate a little bit for this kind of choice.
 
 using System;
+using System.Linq;
+using System.Reflection;
 using MongoDB.Driver;
-using FleetwoodMac_Personel.Facade.Persistence.Mongo.Entities;
 using MessagePack;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 
 namespace FleetwoodMac_Personel.Facade.Persistence.Mongo.Repository
 {
@@ -19,93 +21,91 @@ namespace FleetwoodMac_Personel.Facade.Persistence.Mongo.Repository
     {
         private readonly IMongoClient client;
         private readonly IMongoDatabase database;
-        private readonly IMongoCollection<BaseModel> collection;
 
         public MongoRepository()
         {
             client = new MongoClient();
             database = client.GetDatabase("FleedwoodMac");
-            collection = database.GetCollection<BaseModel>("Models");
         }
 
-        public  async Task RemoveModel(string id)
+        public  async Task RemoveModel<T>(string id, string collection)
         {
-            if (!Guid.TryParse(id, out Guid _id))
+            var col = database.GetCollection<T>(collection);
+            
+            if (!ObjectId.TryParse(id, out ObjectId _id))
             {
                 Log.Error(" [x] Invalid object id specified.");
                 throw new Exception("Invalid object id");
             }
 
-            await collection.FindOneAndDeleteAsync(Builders<BaseModel>.Filter.Eq("Id", _id));
+            await col.FindOneAndDeleteAsync(Builders<T>.Filter.Eq("Id", _id));
         }
         
-        public  async Task<T> SumOverCluster<T>(Guid persistenceId, string joinProperty)
+        // NOTE: If you want to specify more conditions here, you have to granulate your data further.
+        // IE: To map accordingly to persistenceIndex and a specific window of time, the date should be stored as split elements (year, month, day).
+        public  async Task<BsonDocument> SumOverCluster<T>(Guid persistenceIndex, string joinProperty, string collection)
         {
             Log.Data($"Summing over cluster on prop {joinProperty}");
+
+            var col = database.GetCollection<T>(collection);
             
             var map = @"
-                function() {
+                function() {{
                     var model = this;
-                    emit(model.Id, { count: 1, eVal: {0} });
-                }";
+                    emit(model.PersistenceIndex, {{ count: 1, eVal: model.{0} }});
+                }}";
             map = string.Format(map, joinProperty);
 
             var reduce = @"
                 function(key, value) {
-                    var retval = { count: 0, total: 0 };
+                    var retval = { Count: 0, Total: 0 };
                     value.forEach( function( val ) {
-                        retval.count += 1;
-                        retval.total += val.eVal;                    
+                        retval.Count += 1;
+                        retval.Total += val.eVal;                    
                     });
                     return retval;
                 }";
-            
-            var retval = await collection.MapReduceAsync(map, reduce, new MapReduceOptions<BaseModel, T>()
+
+            var retval = await col.MapReduceAsync(map, reduce, new MapReduceOptions<T, BsonDocument>()
             {
-                Filter = Builders<BaseModel>.Filter.Eq("PersistenceId", persistenceId.ToString())
+                Filter = Builders<T>.Filter.Eq("PersistenceIndex", persistenceIndex)
             });
 
             return await retval.FirstOrDefaultAsync();
         }
 
-        public Guid InsertModel<T>(T model)
+        public ObjectId InsertModel<T>(T model, string collection)
         {
-            var bm = new BaseModel() { Id = Guid.NewGuid() };
-            bm.Blob = MessagePackSerializer.Serialize<T>(model);
-            collection.InsertOne(bm);
+            var col = database.GetCollection<T>(collection);
+            col.InsertOne(model);
 
-            return Guid.Parse(bm.Id.ToString());
+            return (ObjectId)typeof(T).GetProperty("Id", BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public).GetValue(model);   // let it throw whatever
         }
 
-        public  T GetModel<T>(string id) where T : class, new()
+        public async Task<T> GetModel<T>(string id, string collection) where T : class, new()
         {
-            if (!Guid.TryParse(id, out Guid _id))
+            var col = database.GetCollection<T>(collection);
+            
+            if (!ObjectId.TryParse(id, out ObjectId _id))
             {
                 Log.Error(" [x] Invalid object id specified.");
                 throw new Exception("Invalid object id");
             }
 
-            var model = collection.Find(Builders<BaseModel>.Filter.Eq("Id", _id)).FirstOrDefault();
-            if(model == null)
-            {
-                //Log.Error($" [x] Cannot find object with Id {id}");
-                return null;
-            }
-
-            return MessagePackSerializer.Deserialize<T>(model.Blob);
+            return await (await col.FindAsync(Builders<T>.Filter.Eq("Id", _id))).FirstOrDefaultAsync();   // awkward
         }
 
-        public  void UpdateModel<T>(T model, string objectId)
+        public async Task UpdateModel<T>(T model, string objectId, string collection)
         {
-            if (!Guid.TryParse(objectId, out Guid _id))
+            var col = database.GetCollection<T>(collection);
+            
+            if (!ObjectId.TryParse(objectId, out ObjectId id))
             {
                 Log.Error(" [x] Invalid object id specified.");
                 return;
             }
-            var found = collection.Find(Builders<BaseModel>.Filter.Eq("Id", _id)).FirstOrDefault();
-            found.Blob = MessagePackSerializer.Serialize<T>(model);
 
-            collection.FindOneAndReplace(Builders<BaseModel>.Filter.Eq("Id", _id), found);
+            await col.FindOneAndReplaceAsync(Builders<T>.Filter.Eq("Id", id), model);
 
             Log.Info($" [x] Updated model with _id {objectId}");
         }
